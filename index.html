@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>(function(s){s.dataset.zone='10133334',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+<script>(function(s){s.dataset.zone='10133331',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+<script>(function(s){s.dataset.zone='10106373',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+
+<script>(function(s){s.dataset.zone='10133334',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Pikashow Movies & Series</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a1e, #0a1a3c);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 60px; /* Reduced to accommodate smaller nav */
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #1a1a2e, #0f3460);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .header:hover {
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFD700;
+            text-align: center;
+            text-shadow: 0 0 4px rgba(255, 215, 0, 0.4);
+        }
+
+        .search-container {
+            max-width: 900px;
+            margin: 23px auto;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .search-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container input, .search-container select {
+            padding: 11px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .search-container input {
+            flex: 1;
+            min-width: 200px;
+            max-width: 400px;
+        }
+
+        .search-container select {
+            min-width: 150px;
+            cursor: pointer;
+        }
+
+        .search-container input:focus, .search-container select:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 8px rgba(74, 144, 226, 0.4);
+        }
+
+        .search-container input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+        }
+
+        .movies-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 1200px;
+            margin: 24px auto;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .movies-container.transition {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .movie-card {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #1a1a2e;
+            border: 2px solid transparent;
+            background-image: linear-gradient(#1a1a2e, #1a1a2e), linear-gradient(45deg, #FFD700, #FF4500, #00FF7F, #4a90e2);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(74, 144, 226, 0.3);
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            display: block;
+            border-radius: 8px;
+            transition: filter 0.3s ease;
+        }
+
+        .movie-card:hover img {
+            filter: brightness(1.1);
+        }
+
+        .movie-card .title {
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            color: #fff;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .movie-card .favorite {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 18px;
+            color: #fff;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        .movie-card .favorite:hover {
+            transform: scale(1.2);
+        }
+
+        .movie-card .favorite.active {
+            color: #FFD700;
+        }
+
+        .quality-tag {
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            background: linear-gradient(45deg, #FFD700, #FF0000);
+            padding: 3px 7px;
+            font-size: 8px;
+            font-weight: 600;
+            color: #000000;
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, rgba(20, 20, 40, 0.95), rgba(10, 10, 30, 0.95));
+            padding: 24px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 24px rgba(74, 144, 226, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            z-index: 2000;
+        }
+
+        .popup .back-home-btn {
+            background: linear-gradient(45deg, #FF0000, #FFD700);
+            color: #fff;
+            padding: 9px;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 16px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .popup .back-home-btn:hover {
+            background: linear-gradient(45deg, #FFA500, #FF4500);
+            transform: translateY(-1px);
+        }
+
+        .popup h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #FFD700;
+            margin-bottom: 12px;
+            text-shadow: 0 0 4px rgba(255, 215, 0, 0.4);
+            margin-left: 120px;
+            overflow: hidden;
+        }
+
+        .popup img {
+            width: 100%;
+            max-width: 100px;
+            border-radius: 8px;
+            margin: 0 16px 16px 0;
+            float: left;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup .details {
+            font-size: 14px;
+            color: #d0d0d0;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-left: 120px;
+            overflow: hidden;
+        }
+
+        .popup .details p {
+            display: flex;
+            justify-content: space-between;
+            margin: 6px 0;
+        }
+
+        .popup .quality-badge {
+            font-size: 10px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            padding: 4px 7px;
+            border-radius: 3px;
+            color: #000000;
+        }
+
+        .popup .description {
+            font-size: 10px;
+            color: #ADFF2F;
+            line-height: 1.5;
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-left: 120px;
+            overflow: hidden;
+        }
+
+        .popup .description.error {
+            color: #FF4500;
+            font-style: italic;
+        }
+
+        .popup .server-list, .popup .episode-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            clear: both;
+        }
+
+        .popup .server-item, .popup .episode-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            margin: 6px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popup .server-item span, .popup .episode-item span {
+            font-size: 12px;
+            color: #fff;
+            flex: 1;
+        }
+
+        .popup button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .popup .stream-btn {
+            background: linear-gradient(45deg, #00FF7F, #32CD32);
+        }
+
+        .popup .download-btn {
+            background: linear-gradient(45deg, #FFA500, #FF4500);
+        }
+
+        .popup #favoriteBtn {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000000;
+        }
+
+        .popup #favoriteBtn.active {
+            background: linear-gradient(45deg, #FF4500, #e74c3c);
+        }
+
+        .popup button:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(90deg, rgba(10, 10, 30, 0.95), rgba(15, 52, 96, 0.95));
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0; /* Reduced padding */
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            gap: 8px; /* Added gap for better spacing */
+        }
+
+        .bottom-nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px; /* Smaller font */
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: color 0.3s ease, transform 0.2s ease, background 0.3s ease;
+        }
+
+        .bottom-nav a:hover {
+            color: #FFD700;
+            transform: scale(1.1);
+            background: linear-gradient(45deg, rgba(255, 215, 0, 0.2), rgba(255, 69, 0, 0.2));
+        }
+
+        .bottom-nav a.active {
+            color: #FFD700;
+            background: linear-gradient(45deg, rgba(255, 215, 0, 0.3), rgba(255, 69, 0, 0.3));
+        }
+
+        .bottom-nav a.active::after {
+            content: '';
+            width: 20px;
+            height: 1px; /* Thinner underline */
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border-radius: 2px;
+            margin-top: 4px;
+            animation: underline 0.3s ease;
+        }
+
+        @keyframes underline {
+            0% { width: 0; }
+            100% { width: 20px; }
+        }
+
+        .bottom-nav i {
+            font-size: 16px; /* Smaller icons */
+            margin-bottom: 4px;
+            transition: transform 0.2s ease;
+        }
+
+        .bottom-nav a:hover i {
+            transform: scale(1.2);
+        }
+
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #4a90e2;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 1s linear infinite;
+            margin: 16px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-results, .error-message {
+            font-size: 14px;
+            color: #999;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            margin: 16px auto;
+            max-width: 600px;
+        }
+
+        .error-message {
+            background: rgba(231, 76, 60, 0.2);
+            color: #FF4500;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .pagination button {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: linear-gradient(45deg, #FFA500, #FF4500);
+            transform: translateY(-1px);
+        }
+
+        .pagination button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        @media (max-width: 768px) {
+            .movies-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .movie-card img {
+                height: 200px;
+            }
+
+            .search-container input {
+                max-width: 100%;
+            }
+
+            .popup {
+                width: 95%;
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .movies-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+
+            .movie-card img {
+                height: 160px;
+            }
+
+            .movie-card .title {
+                font-size: 12px;
+            }
+
+            .search-container select {
+                min-width: 100px;
+                font-size: 14px;
+            }
+
+            .bottom-nav a {
+                font-size: 8px; /* Smaller font for mobile */
+                padding: 4px 6px;
+            }
+
+            .bottom-nav i {
+                font-size: 14px; /* Smaller icons for mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="search-container">
+        <input type="text" id="searchBox" placeholder="🔍 Search movies or series...">
+        <select id="sortOption" onchange="liveSearch()">
+            <option value="updatedAt">Recently Added</option>
+            <option value="title">Title</option>
+            <option value="quality">Quality</option>
+        </select>
+    </div>
+
+    <div id="loader" class="loader" style="display: none;"></div>
+    <div id="errorMessage" class="error-message" style="display: none;"></div>
+    <div class="movies-container" id="movies"></div>
+    <div class="pagination">
+        <button id="prevBtn" onclick="changePage(-1)" disabled>Previous</button>
+        <button id="nextBtn" onclick="changePage(1)">Next</button>
+    </div>
+
+    <div id="popup" class="popup">
+        <button class="back-home-btn" onclick="closePopup()">Back to Home</button>
+        <img id="popupPoster" src="" alt="Poster" style="display: none;">
+        <h2 id="popupTitle"></h2>
+        <div class="details">
+            <p><strong>Type:</strong> <span id="popupType"></span></p>
+            <span class="quality-badge" id="popupQuality"></span>
+        </div>
+        <p class="description" id="popupDescription"></p>
+        <button id="favoriteBtn" onclick="toggleFavorite()">⭐ Add to Favorites</button>
+        <div id="serverList" class="server-list"></div>
+        <div id="episodeList" class="episode-list"></div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="javascript:void(0)" onclick="goToTrending()" data-nav="trending" class="active">
+            <i>🔥</i><span>Trending</span>
+        </a>
+        <a href="javascript:void(0)" onclick="goToRecommendations()" data-nav="recommendations">
+            <i>🎥</i><span>Recommendations</span>
+        </a>
+        <a href="javascript:void(0)" onclick="goToTopPicks()" data-nav="toppicks">
+            <i>🌟</i><span>Top Picks</span>
+        </a>
+        <a href="javascript:void(0)" onclick="goToFavorites()" data-nav="favorites">
+            <i>⭐</i><span>Favorites</span>
+        </a>
+        <a href="javascript:void(0)" onclick="goToHistory()" data-nav="history">
+            <i>⏳</i><span>History</span>
+        </a>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBb88I5DXMAfJKV0azicAklt_RTQ9Z8Bsk",
+            authDomain: "pikashowdownloader.firebaseapp.com",
+            projectId: "pikashowdownloader",
+        };
+        try {
+            firebase.initializeApp(firebaseConfig);
+            console.log("Firebase initialized at 06:14 PM IST, September 17, 2025");
+        } catch (error) {
+            console.error("Firebase init failed:", error);
+            alert("❌ Failed to connect to Firebase. Check configuration or network.");
+        }
+
+        const db = firebase.firestore();
+        const OMDb_API_KEY = '2017f765';
+        const TMDb_API_KEY = '525924dcbba5bd59a74776936ae2e8e7';
+        let allMovies = [];
+        let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        let history = JSON.parse(localStorage.getItem('history') || '[]');
+        let currentMovieId = null;
+        let currentPage = 1;
+        const itemsPerPage = 12;
+        let lastVisible = null;
+        let firstVisible = null;
+        let currentQuery = '';
+        let currentSort = 'updatedAt';
+
+        window.onload = () => {
+            console.log("User Panel loaded at 06:14 PM IST, September 17, 2025");
+            loadMovies();
+            history.replaceState({ page: 'trending' }, "Trending", window.location.pathname);
+        };
+
+        async function fetchDescription(title, type, docId) {
+            console.log(`Fetching description for: ${title} (${type}, ID: ${docId})`);
+            if (!title || !docId) {
+                console.error("Missing title or docId:", { title, docId });
+                return "❌ Invalid movie data";
+            }
+
+            const docRef = db.collection("content").doc(docId);
+            try {
+                const doc = await docRef.get();
+                if (doc.exists && doc.data().description) {
+                    console.log(`Description found in Firestore for ${title}: ${doc.data().description}`);
+                    return doc.data().description;
+                }
+            } catch (err) {
+                console.error(`Firestore read error for ${docId}: ${err.message}`);
+            }
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+            try {
+                console.log(`Attempting OMDb API for ${title}`);
+                const res = await fetch(`http://www.omdbapi.com/?apikey=${OMDb_API_KEY}&t=${encodeURIComponent(title)}`, { signal: controller.signal });
+                const data = await res.json();
+                if (data.Response === "True" && data.Plot && data.Plot !== "N/A") {
+                    await docRef.set({ description: data.Plot }, { merge: true });
+                    clearTimeout(timeoutId);
+                    console.log(`OMDb description saved for ${title}: ${data.Plot}`);
+                    return data.Plot;
+                }
+            } catch (err) {
+                console.warn(`OMDb fetch failed for ${title}: ${err.message}`);
+            }
+
+            try {
+                console.log(`Attempting TMDb API for ${title}`);
+                const endpoint = type === 'series' ? 'tv' : 'movie';
+                const res = await fetch(`https://api.themoviedb.org/3/search/${endpoint}?api_key=${TMDb_API_KEY}&query=${encodeURIComponent(title)}`, { signal: controller.signal });
+                const data = await res.json();
+                if (data.results && data.results.length > 0 && data.results[0].overview) {
+                    await docRef.set({ description: data.results[0].overview }, { merge: true });
+                    clearTimeout(timeoutId);
+                    console.log(`TMDb description saved for ${title}: ${data.results[0].overview}`);
+                    return data.results[0].overview;
+                }
+            } catch (err) {
+                console.warn(`TMDb fetch failed for ${title}: ${err.message}`);
+            }
+
+            clearTimeout(timeoutId);
+            try {
+                await docRef.set({ description: 'No description available' }, { merge: true });
+                console.log(`Saved default description for ${title}`);
+                return 'No description available';
+            } catch (err) {
+                console.error(`Firestore write error for ${docId}: ${err.message}`);
+                return '❌ Failed to load description';
+            }
+        }
+
+        async function loadMovies() {
+            const errorDiv = document.getElementById("errorMessage");
+            document.getElementById("loader").style.display = "block";
+            errorDiv.style.display = "none";
+            try {
+                let query = db.collection("content");
+                if (currentQuery) {
+                    console.log(`Applying search filter: ${currentQuery}`);
+                    query = query.where("titleLowercase", ">=", currentQuery).where("titleLowercase", "<=", currentQuery + '\uf8ff');
+                    query = query.orderBy("titleLowercase", "asc");
+                    if (currentSort === 'updatedAt') query = query.orderBy("updatedAt", "desc");
+                    else if (currentSort === 'quality') query = query.orderBy("quality", "asc");
+                } else {
+                    if (currentSort === 'title') query = query.orderBy("titleLowercase", "asc");
+                    else if (currentSort === 'quality') query = query.orderBy("quality", "asc");
+                    else query = query.orderBy("updatedAt", "desc");
+                }
+                query = query.limit(itemsPerPage);
+                if (lastVisible && currentPage > 1) query = query.startAfter(lastVisible);
+
+                console.log("Executing query with sort:", currentSort, "page:", currentPage);
+                const snapshot = await query.get();
+                console.log("Fetched documents:", snapshot.size);
+
+                allMovies = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    if (!data.titleLowercase && data.title) {
+                        db.collection("content").doc(doc.id).update({
+                            titleLowercase: data.title.toLowerCase()
+                        }).catch(err => console.error(`Failed to update titleLowercase for ${doc.id}: ${err.message}`));
+                    }
+                    return { id: doc.id, ...data, loading: !data.poster };
+                });
+
+                if (snapshot.docs.length > 0) {
+                    lastVisible = snapshot.docs[snapshot.docs.length - 1];
+                    firstVisible = snapshot.docs[0];
+                } else {
+                    errorDiv.textContent = "No content found. Add content via admin panel or check Firestore rules.";
+                    errorDiv.style.display = "block";
+                }
+
+                allMovies.forEach(movie => {
+                    if (movie.poster && movie.loading) {
+                        const img = new Image();
+                        img.onload = () => { movie.loading = false; displayMovies(allMovies); };
+                        img.onerror = () => {
+                            movie.loading = false;
+                            movie.poster = 'https://via.placeholder.com/150';
+                            console.error(`Image load failed for ${movie.title}: ${movie.poster}`);
+                            displayMovies(allMovies);
+                        };
+                        img.src = movie.poster;
+                    }
+                });
+
+                displayMovies(allMovies);
+                let totalQuery = db.collection("content");
+                if (currentQuery) totalQuery = totalQuery.where("titleLowercase", ">=", currentQuery).where("titleLowercase", "<=", currentQuery + '\uf8ff');
+                updatePaginationButtons(await totalQuery.get().then(snap => snap.size));
+            } catch (err) {
+                console.error("Load Error:", err.message, err);
+                console.log("Full error details (for index link):", err.details || "No details provided");
+                errorDiv.innerHTML = err.code === 'failed-precondition' ?
+                    `❌ Index Error: The query requires an index. <br><strong>Go to <a href="https://console.firebase.google.com/project/pikashowdownloader/firestore/indexes" target="_blank">Firebase Console > Firestore > Indexes</a></strong> and create a composite index with fields:<br>1. titleLowercase (Ascending)<br>2. ${currentSort} (${currentSort === 'updatedAt' ? 'Descending' : 'Ascending'})<br>3. __name__ (Ascending)<br>Details: ${err.message}` :
+                    err.code === 'permission-denied' ?
+                    `❌ Firestore permissions error. Update rules in Firebase Console: allow read: if true;` :
+                    `❌ Load Error: ${err.message}`;
+                if (err.details && err.details.includes('console.firebase.google.com')) {
+                    errorDiv.innerHTML += `<br><a href="${err.details}" target="_blank" style="color: #4a90e2;">Click to Create Index</a>`;
+                }
+                errorDiv.style.display = "block";
+            } finally {
+                document.getElementById("loader").style.display = "none";
+            }
+        }
+
+        async function liveSearch() {
+            currentQuery = document.getElementById("searchBox").value.trim().toLowerCase();
+            currentSort = document.getElementById("sortOption").value;
+            currentPage = 1;
+            lastVisible = null;
+            firstVisible = null;
+            await loadMovies();
+        }
+
+        function displayMovies(movies) {
+            const container = document.getElementById("movies");
+            container.classList.add("transition");
+            setTimeout(() => {
+                container.innerHTML = "";
+                if (!movies.length) {
+                    container.innerHTML = '<p class="no-results">No results found</p>';
+                    container.classList.remove("transition");
+                    return;
+                }
+                movies.forEach(movie => {
+                    const isFavorite = favorites.some(f => f.id === movie.id);
+                    const card = document.createElement("div");
+                    card.classList.add("movie-card");
+                    card.innerHTML = `
+                        <span class="favorite ${isFavorite ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${movie.id}')">⭐</span>
+                        <img src="${movie.loading ? 'https://via.placeholder.com/150' : (movie.poster || 'https://via.placeholder.com/150')}" alt="${movie.title}" onclick="openPopup('${movie.id}')" loading="lazy">
+                        <div class="title">${movie.title || 'Unknown Title'}</div>
+                        <span class="quality-tag">${movie.quality || 'HD'}</span>
+                    `;
+                    container.appendChild(card);
+                });
+                container.classList.remove("transition");
+            }, 300);
+        }
+
+        let searchTimeout;
+        document.getElementById("searchBox").oninput = () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(liveSearch, 300);
+        };
+
+        async function openPopup(docId) {
+            let movie = allMovies.find(m => m.id === docId);
+            if (!movie) {
+                console.log(`Movie not in allMovies, fetching from Firestore: ${docId}`);
+                try {
+                    const doc = await db.collection("content").doc(docId).get();
+                    if (doc.exists) {
+                        movie = { id: doc.id, ...doc.data(), loading: !doc.data().poster };
+                        if (!allMovies.some(m => m.id === docId)) {
+                            allMovies.push(movie);
+                        }
+                    } else {
+                        console.error("Movie not found in Firestore:", docId);
+                        alert("❌ Movie not found!");
+                        return;
+                    }
+                } catch (err) {
+                    console.error(`Firestore fetch error for ${docId}: ${err.message}`);
+                    alert("❌ Failed to load movie data!");
+                    return;
+                }
+            }
+
+            currentMovieId = docId;
+            document.getElementById("popupTitle").textContent = movie.title || 'Unknown Title';
+            document.getElementById("popupQuality").textContent = movie.quality || 'HD';
+            document.getElementById("popupType").textContent = movie.type || 'N/A';
+            document.getElementById("popupDescription").textContent = movie.description || 'Loading...';
+            const posterImg = document.getElementById("popupPoster");
+            posterImg.src = movie.poster || 'https://via.placeholder.com/150';
+            posterImg.style.display = movie.poster ? 'block' : 'none';
+
+            const favoriteBtn = document.getElementById("favoriteBtn");
+            const isFavorite = favorites.some(f => f.id === docId);
+            favoriteBtn.textContent = isFavorite ? '⭐ Remove from Favorites' : '⭐ Add to Favorites';
+            favoriteBtn.className = `button ${isFavorite ? 'active' : ''}`;
+
+            const serverList = document.getElementById("serverList");
+            const episodeList = document.getElementById("episodeList");
+            serverList.style.display = movie.type === "movie" ? "block" : "none";
+            episodeList.style.display = movie.type === "series" ? "block" : "none";
+
+            serverList.innerHTML = movie.servers?.length ? movie.servers.map((server, index) => `
+                <div class="server-item">
+                    <span>Server ${index + 1} (${server.quality || 'HD'})</span>
+                    <div class="buttons">
+                        ${server.streaming ? `<button class="stream-btn" onclick="watchContent('${server.streaming}', '${movie.id}', '${movie.title}')">▶ Stream</button>` : ''}
+                        ${server.download ? `<button class="download-btn" onclick="downloadContent('${server.download}', '${movie.id}', '${movie.title}')">⬇ Download</button>` : ''}
+                    </div>
+                </div>
+            `).join('') : '<p class="no-results">No servers available</p>';
+
+            const sortedEpisodes = movie.episodes?.length ? [...movie.episodes].sort((a, b) => parseFloat(a.episodeNumber) - parseFloat(b.episodeNumber)) : [];
+            episodeList.innerHTML = sortedEpisodes.length ? sortedEpisodes.map((e, index) => `
+                <div class="episode-item">
+                    <span>Episode ${e.episodeNumber} - ${e.title}</span>
+                    <div class="buttons">
+                        ${e.streaming ? `<button class="stream-btn" onclick="watchContent('${e.streaming}', '${movie.id}', '${movie.title}', '${e.episodeNumber}')">▶ Stream</button>` : ''}
+                        ${e.download ? `<button class="download-btn" onclick="downloadContent('${e.download}', '${movie.id}', '${movie.title}', '${e.episodeNumber}')">⬇ Download</button>` : ''}
+                    </div>
+                </div>
+            `).join('') : '<p class="no-results">No episodes available</p>';
+
+            document.getElementById("popup").style.display = "block";
+            history.pushState({ popup: true, docId }, "Popup", `${window.location.pathname}?popup=${docId}`);
+
+            if (!movie.description || movie.description === 'Loading...') {
+                document.getElementById("popupDescription").textContent = 'Loading...';
+                fetchDescription(movie.title || 'Unknown', movie.type || 'movie', movie.id).then(desc => {
+                    movie.description = desc;
+                    document.getElementById("popupDescription").textContent = desc;
+                    if (desc.startsWith('❌')) {
+                        document.getElementById("popupDescription").classList.add('error');
+                    }
+                }).catch(err => {
+                    console.error(`Failed to load description for ${movie.title}: ${err.message}`);
+                    document.getElementById("popupDescription").textContent = '❌ Failed to load description';
+                    document.getElementById("popupDescription").classList.add('error');
+                });
+            }
+        }
+
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+            goToTrending();
+        }
+
+        window.onpopstate = function(event) {
+            if (document.getElementById("popup").style.display === "block") {
+                closePopup();
+            } else {
+                goToTrending();
+            }
+        };
+
+        function toggleFavorite(docId = currentMovieId) {
+            let movie = allMovies.find(m => m.id === docId);
+            if (!movie) {
+                console.warn(`Movie not in allMovies for favorite toggle: ${docId}`);
+                return;
+            }
+            const favoriteBtn = document.getElementById("favoriteBtn");
+            const index = favorites.findIndex(f => f.id === docId);
+            if (index >= 0) {
+                favorites.splice(index, 1);
+                favoriteBtn.textContent = '⭐ Add to Favorites';
+                favoriteBtn.classList.remove('active');
+            } else {
+                favorites.push({ id: movie.id, title: movie.title, poster: movie.poster });
+                favoriteBtn.textContent = '⭐ Remove from Favorites';
+                favoriteBtn.classList.add('active');
+            }
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            if (document.querySelector('.bottom-nav a[data-nav="favorites"]').classList.contains('active')) {
+                goToFavorites(); // Refresh Favorites view
+            } else {
+                loadMovies();
+            }
+        }
+
+        function watchContent(url, docId, title, episode = '') {
+            if (!url) return alert("❌ No valid URL");
+            window.open(url, '_blank');
+            history.push({ id: docId, title, episode, timestamp: new Date().toISOString() });
+            localStorage.setItem('history', JSON.stringify(history));
+        }
+
+        function downloadContent(url, docId, title, episode = '') {
+            if (!url) return alert("❌ No valid URL");
+            window.open(url, '_blank');
+            history.push({ id: docId, title, episode, timestamp: new Date().toISOString() });
+            localStorage.setItem('history', JSON.stringify(history));
+        }
+
+        function setActiveNav(nav) {
+            document.querySelectorAll('.bottom-nav a').forEach(a => a.classList.remove('active'));
+            document.querySelector(`.bottom-nav a[data-nav="${nav}"]`).classList.add('active');
+            document.getElementById("popup").style.display = "none";
+        }
+
+        function goToTrending() {
+            setActiveNav('trending');
+            document.getElementById("searchBox").value = "";
+            document.getElementById("sortOption").value = "updatedAt";
+            currentQuery = '';
+            currentSort = 'updatedAt';
+            currentPage = 1;
+            lastVisible = null;
+            firstVisible = null;
+            loadMovies();
+            history.replaceState({ page: 'trending' }, "Trending", window.location.pathname);
+        }
+
+        function goToRecommendations() {
+            setActiveNav('recommendations');
+            document.getElementById("searchBox").value = "";
+            document.getElementById("sortOption").value = "updatedAt";
+            currentQuery = '';
+            currentSort = 'updatedAt';
+            currentPage = 1;
+            lastVisible = null;
+            firstVisible = null;
+            loadPaginatedMovies([...allMovies].sort(() => 0.5 - Math.random()).slice(0, 20));
+            history.replaceState({ page: 'recommendations' }, "Recommendations", window.location.pathname);
+        }
+
+        function goToTopPicks() {
+            setActiveNav('toppicks');
+            document.getElementById("searchBox").value = "";
+            document.getElementById("sortOption").value = "updatedAt";
+            currentQuery = '';
+            currentSort = 'updatedAt';
+            currentPage = 1;
+            lastVisible = null;
+            firstVisible = null;
+            loadPaginatedMovies([...allMovies].sort(() => 0.5 - Math.random()).slice(0, 20));
+            history.replaceState({ page: 'toppicks' }, "Top Picks", window.location.pathname);
+        }
+
+        async function goToFavorites() {
+            setActiveNav('favorites');
+            document.getElementById("searchBox").value = "";
+            document.getElementById("sortOption").value = "updatedAt";
+            currentQuery = '';
+            currentSort = 'updatedAt';
+            currentPage = 1;
+            lastVisible = null;
+            firstVisible = null;
+
+            // Fetch full movie data for favorites
+            const favoriteMovies = [];
+            for (const fav of favorites) {
+                let movie = allMovies.find(m => m.id === fav.id);
+                if (!movie) {
+                    try {
+                        const doc = await db.collection("content").doc(fav.id).get();
+                        if (doc.exists) {
+                            movie = { id: doc.id, ...doc.data(), loading: !doc.data().poster };
+                            allMovies.push(movie);
+                        } else {
+                            console.warn(`Favorite movie not found in Firestore: ${fav.id}`);
+                            continue;
+                        }
+                    } catch (err) {
+                        console.error(`Failed to fetch favorite movie ${fav.id}: ${err.message}`);
+                        continue;
+                    }
+                }
+                favoriteMovies.push(movie);
+            }
+
+            loadPaginatedMovies(favoriteMovies);
+            history.replaceState({ page: 'favorites' }, "Favorites", window.location.pathname);
+        }
+
+        function goToHistory() {
+            setActiveNav('history');
+            document.getElementById("searchBox").value = "";
+            document.getElementById("sortOption").value = "updatedAt";
+            currentQuery = '';
+            currentSort = 'updatedAt';
+            currentPage = 1;
+            lastVisible = null;
+            firstVisible = null;
+            const historyMovies = history.map(h => {
+                let movie = allMovies.find(m => m.id === h.id);
+                if (!movie) {
+                    movie = { id: h.id, title: h.title, poster: h.poster, loading: !h.poster };
+                    allMovies.push(movie);
+                }
+                return movie;
+            });
+            loadPaginatedMovies(historyMovies);
+            history.replaceState({ page: 'history' }, "History", window.location.pathname);
+        }
+
+        async function changePage(direction) {
+            const previousPage = currentPage;
+            currentPage += direction;
+            if (currentPage < 1) {
+                currentPage = 1;
+                return;
+            }
+
+            document.getElementById("loader").style.display = "block";
+            const errorDiv = document.getElementById("errorMessage");
+            errorDiv.style.display = "none";
+            try {
+                let baseQuery = db.collection("content");
+                if (currentQuery) {
+                    console.log(`Applying search filter: ${currentQuery}`);
+                    baseQuery = baseQuery.where("titleLowercase", ">=", currentQuery).where("titleLowercase", "<=", currentQuery + '\uf8ff');
+                    baseQuery = baseQuery.orderBy("titleLowercase", "asc");
+                    if (currentSort === 'updatedAt') baseQuery = baseQuery.orderBy("updatedAt", "desc");
+                    else if (currentSort === 'quality') baseQuery = baseQuery.orderBy("quality", "asc");
+                } else {
+                    if (currentSort === 'title') baseQuery = baseQuery.orderBy("titleLowercase", "asc");
+                    else if (currentSort === 'quality') baseQuery = baseQuery.orderBy("quality", "asc");
+                    else baseQuery = baseQuery.orderBy("updatedAt", "desc");
+                }
+
+                const totalItems = await baseQuery.get().then(snap => snap.size);
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                if (currentPage > totalPages) {
+                    currentPage = totalPages;
+                    document.getElementById("loader").style.display = "none";
+                    return;
+                }
+
+                let paginatedQuery = baseQuery.limit(itemsPerPage);
+                if (direction > 0 && lastVisible) {
+                    console.log("Navigating forward, starting after:", lastVisible.data()[currentSort === 'title' ? 'titleLowercase' : currentSort === 'quality' ? 'quality' : 'updatedAt'] || 'N/A');
+                    paginatedQuery = paginatedQuery.startAfter(lastVisible);
+                } else if (direction < 0 && firstVisible) {
+                    console.log("Navigating backward, ending before:", firstVisible.data()[currentSort === 'title' ? 'titleLowercase' : currentSort === 'quality' ? 'quality' : 'updatedAt'] || 'N/A');
+                    paginatedQuery = paginatedQuery.endBefore(firstVisible).limitToLast(itemsPerPage);
+                }
+
+                const snapshot = await paginatedQuery.get();
+                if (snapshot.empty) {
+                    console.log("No documents found for page:", currentPage);
+                    errorDiv.textContent = "No content found for this page.";
+                    errorDiv.style.display = "block";
+                    currentPage = previousPage;
+                    document.getElementById("loader").style.display = "none";
+                    return;
+                }
+
+                allMovies = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    if (!data.titleLowercase && data.title) {
+                        db.collection("content").doc(doc.id).update({
+                            titleLowercase: data.title.toLowerCase()
+                        }).catch(err => console.error(`Failed to update titleLowercase for ${doc.id}: ${err.message}`));
+                    }
+                    return { id: doc.id, ...data, loading: !data.poster };
+                });
+
+                lastVisible = snapshot.docs[snapshot.docs.length - 1];
+                firstVisible = snapshot.docs[0];
+                console.log("Page loaded:", currentPage, "Movies:", allMovies.map(m => m.title));
+
+                allMovies.forEach(movie => {
+                    if (movie.poster && movie.loading) {
+                        const img = new Image();
+                        img.onload = () => { movie.loading = false; displayMovies(allMovies); };
+                        img.onerror = () => {
+                            movie.loading = false;
+                            movie.poster = 'https://via.placeholder.com/150';
+                            console.error(`Image load failed for ${movie.title}: ${movie.poster}`);
+                            displayMovies(allMovies);
+                        };
+                        img.src = movie.poster;
+                    }
+                });
+
+                displayMovies(allMovies);
+                updatePaginationButtons(totalItems);
+            } catch (err) {
+                console.error("Pagination Error:", err.message, err);
+                console.log("Full error details (for index link):", err.details || "No details provided");
+                currentPage = previousPage;
+                errorDiv.innerHTML = err.code === 'failed-precondition' ?
+                    `❌ Index Error: The query requires an index. <br><strong>Go to <a href="https://console.firebase.google.com/project/pikashowdownloader/firestore/indexes" target="_blank">Firebase Console > Firestore > Indexes</a></strong> and create a composite index with fields:<br>1. titleLowercase (Ascending)<br>2. ${currentSort} (${currentSort === 'updatedAt' ? 'Descending' : 'Ascending'})<br>3. __name__ (Ascending)<br>Details: ${err.message}` :
+                    err.code === 'permission-denied' ?
+                    `❌ Firestore permissions error. Update rules in Firebase Console: allow read: if true;` :
+                    `❌ Pagination Error: ${err.message}`;
+                if (err.details && err.details.includes('console.firebase.google.com')) {
+                    errorDiv.innerHTML += `<br><a href="${err.details}" target="_blank" style="color: #4a90e2;">Click to Create Index</a>`;
+                }
+                errorDiv.style.display = "block";
+            } finally {
+                document.getElementById("loader").style.display = "none";
+            }
+        }
+
+        async function loadPaginatedMovies(movies) {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            displayMovies(movies.slice(start, end));
+            updatePaginationButtons(movies.length);
+        }
+
+        function updatePaginationButtons(totalItems) {
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage >= totalPages || totalItems === 0;
+            console.log("Pagination update: currentPage=", currentPage, "totalPages=", totalPages, "totalItems=", totalItems);
+        }
+    </script>
+</body>
+</html>
